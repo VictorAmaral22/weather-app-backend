@@ -2,23 +2,19 @@ const { DataTypes, Model } = require('sequelize');
 
 const { sequelizeCon } = require('../config/db-config');
 
-class Usuario extends Model {}
+class Partido extends Model {}
     
-Usuario.init({
-    email: {
-        type: DataTypes.STRING,
+Partido.init({
+    numero: {
+        type: DataTypes.number,
         primaryKey: true
     },
     nome: DataTypes.STRING,
-    senha: DataTypes.STRING
+    logo: DataTypes.STRING,
 }, { 
     sequelize: sequelizeCon, 
     schema: 'public',
-    modelName: 'usuario'
+    modelName: 'partido'
 });
 
-sequelizeCon.sync({
-    force: true
-});
-
-module.exports = { Usuario };
+module.exports = { Partido };

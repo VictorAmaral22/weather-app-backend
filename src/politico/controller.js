@@ -1,6 +1,8 @@
 const { Usuario } = require('./model');
+const { Resposta } = require('./repostas-model')
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const { Exercicio } = require('../exercicios/model');
 
 class UsuariosController {
 
@@ -52,6 +54,10 @@ class UsuariosController {
             }
         });
         res.json({ user: user});
+    }
+    async getProfile(req, res) {
+        const exercises = await Exercicio.findAndCountAll();
+        res.json({ exercises: exercises});
     }
 }
 
