@@ -51,5 +51,11 @@ app.delete('/users/:name', (req, res) => {
 
 const usuariosRouter = require('./usuarios/routes');
 app.use('/usuarios', usuariosRouter);
+const politicoRouter = require('./politico/routes');
+app.use('/politico', politicoRouter);
+const partidoRouter = require('./partido/routes');
+app.use('/partido', partidoRouter);
+const mandatoRouter = require('./mandato/routes');
+app.use('/mandato', mandatoRouter);
 
 app.listen(3000, () => console.log("Listening at 3000"));

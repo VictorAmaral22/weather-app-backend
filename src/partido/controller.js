@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { Exercicio } = require("../exercicios/model");
 
-class PoliticoController {
+class PartidoController {
   constructor() {}
 
   async create(req, res) {
@@ -63,4 +63,4 @@ class PoliticoController {
   }
 }
 
-module.exports = PoliticoController;
+module.exports = PartidoController;

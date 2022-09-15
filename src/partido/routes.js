@@ -2,8 +2,8 @@ const { Router } = require('express');
 const { isAuth } = require('../middlewares/isAuth');
 const router = Router();
 
-const PartidoController = require('./controller');
-const controller = new PartidoController();
+const PoliticoController = require('./controller');
+const controller = new PoliticoController();
 
 router.post('/', (req, res) => controller.create(req, res));
 router.get('/list', (req, res) => controller.list(req, res));
