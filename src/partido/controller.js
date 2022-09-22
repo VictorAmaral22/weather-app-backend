@@ -23,57 +23,28 @@ class PartidoController {
     res.json(partidos);
   }
 
-  async auth(req, res) {
-    const { email, senha } = req.body;
-
-    const user = await Usuario.findOne({
-      where: {
-        email,
-        senha,
-      },
-    });
-
-    if (!user) {
-      return res.status(400).json({ msg: "USER AND PASS NOT MATCH" });
-    }
-    console.log(user);
-    const meuJwt = jwt.sign(
-      user.dataValues,
-      "SECRET NAO PODERIA ESTAR HARDCODED"
-    );
-    return res.json(meuJwt);
-  }
-
   async getById(req, res) {
     let { id } = req.params;
     id = parseFloat(id);
     const partido = await Partido.findByPk(id);
     if (!partido) {
       throw {
-        status: HTTP_STATUS.NOT_FOUND,
+        status: 400,
         message: "Not Found",
       };
     }
     return res
-      .status(HTTP_STATUS.OK)
+      .status(200)
       .json({ partido });
   }
   async update(req, res) {
     const { id } = req.params;
-    const { name, logo } = req.body;
-    const updateObj = {};
-    if (name) {
-      updateObj.name = name;
-    }
-    if (logo) {
-      updateObj.logo = logo;
-    }
-    await Partido.update(updateObj, { where: { id } });
-    return res.status(HTTP_STATUS.OK).json({ msg: "UPDATED" });
+    await Partido.update(req.body, { where: { id } });
+    return res.status(200).json({ msg: "UPDATED" });
   }
   async delete(req, res) {
-    const { number } = req.params;
-    await Partido.destroy({ where: { number } });
+    const { id } = req.params;
+    await Partido.destroy({ where: { id } });
     res.json({ message: "DELETED" });
   }
 }

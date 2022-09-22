@@ -21,8 +21,15 @@ class MandatoController {
         } = req.body;
 
         // PROCESSAMENTO
-        const hashedpass = await hashPassword(password)
-        const user = await Mandato.create({email, senha: hashedpass, name});
+        const user = await Mandato.create({            
+            id_politico,
+            numero,
+            cidade,
+            estado,
+            pais,
+            cargo,
+            inicio,
+            final});
 
         // RESPOSTA
         return res
@@ -31,69 +38,32 @@ class MandatoController {
 
     }
 
-    async auth(req, res) {
-        const {email, senha} = req.body;
-
-        const user = await Mandato.findOne({
-            where: {
-                email,
-                senha
-            }
-        });
-
-        if (!user) {
-            return res
-                .status(400)
-                .json({msg: "USER AND PASS NOT MATCH"});
-        }
-        console.log(user);
-        const meuJwt = jwt.sign(user.dataValues, 'SECRET NAO PODERIA ESTAR HARDCODED')
-        return res.json(meuJwt);
-    }
-
     async list(req, res) {
-        const users = await Mandato.findAndCountAll();
-        res.json(users);
+        const mandatos = await Mandato.findAndCountAll();
+        res.json(mandatos);
     }
 
     async getById(req, res) {
         let {id} = req.params
-        id = parseFloat(id)
-        const user = await Mandato.findByPk(id)
-        if (!user) {
-            throw {status: HTTP_STATUS.NOT_FOUND, message: "User Not Found"}
+        const Mandato = await Mandato.findByPk(id)
+        if (!Mandato) {
+            throw {status: 400, message: "Mandato Not Found"}
         }
-        const {
-            dataValues: {
-                name,
-                email,
-                createdAt,
-                updatedAt
-            }
-        } = user
         return res
-            .status(HTTP_STATUS.OK)
-            .json({id, name, email, createdAt, updatedAt})
+            .status(200)
+            .json({Mandato})
     }
     async update(req, res) {
-        const {id} = req.user;
-        const {name, password} = req.body;
-        const updateObj = {};
-        if (name) {
-            updateObj.name = name
-        }
-        if (password) {
-            updateObj.password = await hashPassword(password)
-        }
-        await Users.update(updateObj, {where: {
+        const {id} = req.params;
+        await Mandato.update(req.body, {where: {
                 id
             }});
         return res
-            .status(HTTP_STATUS.OK)
+            .status(200)
             .json({msg: "UPDATED"})
     }
     async delete(req, res) {
-        const {id} = req.user;
+        const {id} = req.params;
         await Mandato.destroy({where: {
                 id
             }});

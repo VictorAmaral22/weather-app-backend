@@ -1,5 +1,7 @@
 const { Politico } = require("./model");
 const jwt = require("jsonwebtoken");
+const { Mandato } = require("../mandato/model");
+const { Partido } = require("../partido/model");
 
 class PoliticoController {
   constructor() {}
@@ -45,32 +47,40 @@ class PoliticoController {
 
   async getById(req, res) {
     let { id } =req.params
-    id=parseFloat(id)
+    // id=parseFloat(id)
     const politico=await Politico.findByPk(id)
     if(!politico){
         throw {
-            status:HTTP_STATUS.NOT_FOUND,
+            status:500,
             message:"Not Found"
         }
     }
-    return res.status(HTTP_STATUS.OK).json({politico})
+    if(politico.partido){
+      if(politico.mandatoAtual){
+        let mandato =await Mandato.findByPk(politico.mandatoAtual)
+        let partido =await Partido.findByPk(politico.partido)
+        return res.status(201).json({politico, mandato, partido})
+      }
+    }
+    return res.status(201).json({politico})
 }
 async update(req, res) {
   try{
-      const { id }=req.user;
+      const { id }=req.params;
       console.log(req.body)
-      await Users.update(req.body,{where: { id }});
-      return res.status(HTTP_STATUS.OK).json({msg:"UPDATED"})
+      await Politico.update(req.body,{where: { cpf:id }});
+      return res.status(201).json({msg:"UPDATED"})
   } catch(err){
+    console.log(err)
     return res.json({msg:"Err"})
   }
 }
 async delete(req, res) {
     // const {id:userId}=req.user
     const { id }=req.body;    
-    const foundMusic=await Musics.findByPk(id)
-    await foundMusic.destroy()
-    return res.status(HTTP_STATUS.OK).json({msg:"DELETED"});
+    const deleteId=await Politico.findByPk(id)
+    await deleteId.destroy()
+    return res.status(201).json({msg:"DELETED"});
 }
 }
 

@@ -112,7 +112,9 @@ class UsuariosController {
                 updateObj.name = name
             }
             if (password) {
-                // updateObj.password=await hashPassword(password)
+                const salt = await genSalt(8)
+                const hashedpass = await hash(senha, salt)
+                updateObj.password= hashedpass
             }
             let response = await Usuario.update(updateObj, {where: {
                     id
