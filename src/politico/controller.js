@@ -1,21 +1,16 @@
-const { Usuario } = require("./model");
-const { Resposta } = require("./repostas-model");
-const crypto = require("crypto");
+const { Politico } = require("./model");
 const jwt = require("jsonwebtoken");
-const { Exercicio } = require("../exercicios/model");
 
 class PoliticoController {
   constructor() {}
 
   async create(req, res) {
     // INPUT
-    const { email, senha, nome } = req.body;
+    const { cpf, nome, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual } = req.body;
 
     // PROCESSAMENTO
-    const user = await Usuario.create({
-      email,
-      senha,
-      nome,
+    const user = await Politico.create({
+      cpf, nome, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual
     });
 
     // RESPOSTA
@@ -25,7 +20,7 @@ class PoliticoController {
   async auth(req, res) {
     const { email, senha } = req.body;
 
-    const user = await Usuario.findOne({
+    const user = await Politico.findOne({
       where: {
         email,
         senha,
@@ -44,23 +39,39 @@ class PoliticoController {
   }
 
   async list(req, res) {
-    const users = await Usuario.findAndCountAll();
+    const users = await Politico.findAndCountAll();
     res.json(users);
   }
 
-  async profile(req, res) {
-    let email = "";
-    const user = await Usuario.findOne({
-      where: {
-        email,
-      },
-    });
-    res.json({ user: user });
+  async getById(req, res) {
+    let { id } =req.params
+    id=parseFloat(id)
+    const politico=await Politico.findByPk(id)
+    if(!politico){
+        throw {
+            status:HTTP_STATUS.NOT_FOUND,
+            message:"Not Found"
+        }
+    }
+    return res.status(HTTP_STATUS.OK).json({politico})
+}
+async update(req, res) {
+  try{
+      const { id }=req.user;
+      console.log(req.body)
+      await Users.update(req.body,{where: { id }});
+      return res.status(HTTP_STATUS.OK).json({msg:"UPDATED"})
+  } catch(err){
+    return res.json({msg:"Err"})
   }
-  async getProfile(req, res) {
-    const exercises = await Exercicio.findAndCountAll();
-    res.json({ exercises: exercises });
-  }
+}
+async delete(req, res) {
+    // const {id:userId}=req.user
+    const { id }=req.body;    
+    const foundMusic=await Musics.findByPk(id)
+    await foundMusic.destroy()
+    return res.status(HTTP_STATUS.OK).json({msg:"DELETED"});
+}
 }
 
 module.exports = PoliticoController;

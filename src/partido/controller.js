@@ -1,25 +1,26 @@
-const { Usuario } = require("./model");
-const { Resposta } = require("./repostas-model");
-const crypto = require("crypto");
+const { Partido } = require("./model");
 const jwt = require("jsonwebtoken");
-const { Exercicio } = require("../exercicios/model");
 
 class PartidoController {
   constructor() {}
 
   async create(req, res) {
     // INPUT
-    const { email, senha, nome } = req.body;
+    const { numero, nome, logo } = req.body;
 
     // PROCESSAMENTO
-    const user = await Usuario.create({
-      email,
-      senha,
+    const user = await Partido.create({
+      numero,
       nome,
+      logo,
     });
 
     // RESPOSTA
     return res.status(201).json(user);
+  }
+  async list(req, res) {
+    const partidos = await Partido.findAndCountAll();
+    res.json(partidos);
   }
 
   async auth(req, res) {
@@ -43,23 +44,37 @@ class PartidoController {
     return res.json(meuJwt);
   }
 
-  async list(req, res) {
-    const users = await Usuario.findAndCountAll();
-    res.json(users);
+  async getById(req, res) {
+    let { id } = req.params;
+    id = parseFloat(id);
+    const partido = await Partido.findByPk(id);
+    if (!partido) {
+      throw {
+        status: HTTP_STATUS.NOT_FOUND,
+        message: "Not Found",
+      };
+    }
+    return res
+      .status(HTTP_STATUS.OK)
+      .json({ partido });
   }
-
-  async profile(req, res) {
-    let email = "";
-    const user = await Usuario.findOne({
-      where: {
-        email,
-      },
-    });
-    res.json({ user: user });
+  async update(req, res) {
+    const { id } = req.params;
+    const { nome, logo } = req.body;
+    const updateObj = {};
+    if (nome) {
+      updateObj.nome = nome;
+    }
+    if (logo) {
+      updateObj.logo = logo;
+    }
+    await Partido.update(updateObj, { where: { id } });
+    return res.status(HTTP_STATUS.OK).json({ msg: "UPDATED" });
   }
-  async getProfile(req, res) {
-    const exercises = await Exercicio.findAndCountAll();
-    res.json({ exercises: exercises });
+  async delete(req, res) {
+    const { number } = req.params;
+    await Partido.destroy({ where: { number } });
+    res.json({ message: "DELETED" });
   }
 }
 

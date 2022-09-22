@@ -17,8 +17,6 @@ Usuario.init({
     modelName: 'usuario'
 });
 
-sequelizeCon.sync({
-    force: true
-});
+
 
 module.exports = { Usuario };

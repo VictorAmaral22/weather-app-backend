@@ -2,15 +2,15 @@ const { DataTypes, Model } = require('sequelize');
 
 const { sequelizeCon } = require('../config/db-config');
 const { Politico } = require('../politico/model');
-const { Cargo } = require('./cargo-model');
 class Mandato extends Model {}
     
 Mandato.init({
     id_politico: DataTypes.STRING,
-    cidade: DataTypes.NUMBER,
-    estado: DataTypes.NUMBER,
-    pais: DataTypes.NUMBER,
-    cargo: DataTypes.NUMBER,
+    numero: DataTypes.INTEGER,
+    cidade: DataTypes.STRING,
+    estado: DataTypes.STRING,
+    pais: DataTypes.STRING,
+    cargo: DataTypes.STRING,
     inicio: DataTypes.DATE,
     final: DataTypes.DATE,
 }, { 
@@ -26,8 +26,5 @@ Mandato.belongsTo(Politico,{
 Politico.hasMany(Mandato,{
     foreignKey:'cpf'
 })
-
-Cargo.belongsToMany(Mandato)
-Mandato.hasOne(Cargo)
 
 module.exports = { Mandato };

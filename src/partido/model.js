@@ -6,7 +6,7 @@ class Partido extends Model {}
     
 Partido.init({
     numero: {
-        type: DataTypes.number,
+        type: DataTypes.INTEGER,
         primaryKey: true
     },
     nome: DataTypes.STRING,

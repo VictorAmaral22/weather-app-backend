@@ -13,15 +13,19 @@ Politico.init({
     foto: DataTypes.STRING,
     email: DataTypes.STRING,
     dataNascimento: DataTypes.DATE,
-    cidade: DataTypes.NUMBER,
-    estado: DataTypes.NUMBER,
-    pais: DataTypes.NUMBER,
-    partido: DataTypes.NUMBER,
-    mandatoAtual: DataTypes.NUMBER,
+    cidade: DataTypes.STRING,
+    estado: DataTypes.STRING,
+    pais: DataTypes.STRING,
+    partido: DataTypes.INTEGER,
+    mandatoAtual: DataTypes.INTEGER,
 }, { 
     sequelize: sequelizeCon, 
     schema: 'public',
     modelName: 'politico'
 });
+sequelizeCon.sync({
+    force: true
+});
+
 
 module.exports = { Politico };

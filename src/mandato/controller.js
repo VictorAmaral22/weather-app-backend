@@ -1,9 +1,9 @@
-const { Usuario } = require('./model');
+const { Mandato } = require('./model');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-//const { hashPassword } = require('../utils/passoword.js');
-const {compare,hash,genSalt} = require('bcrypt')
-class UsuariosController {
+const { hashPassword } = require('../utils/passoword.js');
+
+class MandatoController {
 
     constructor() {
         
@@ -11,28 +11,30 @@ class UsuariosController {
 
     async create(req, res) {
         // INPUT
-        try{
-            const { email, senha, nome } = req.body;
-    
-            // PROCESSAMENTO
-            const salt=await genSalt(8)
-            const hashedpass= await hash(senha,salt)
-            const user = await Usuario.create({
-                email, senha:hashedpass, nome
-            });
-    
-            // RESPOSTA
-            return res.status(201).json(user);
-        } catch (err){
-            res.json({msg:'erro'})
-        }
+        const {  id_politico,
+            numero,
+            cidade,
+            estado,
+            pais,
+            cargo,
+            inicio,
+            final } = req.body;
+
+        // PROCESSAMENTO
+        const hashedpass=await hashPassword(password)
+        const user = await Mandato.create({
+            email, senha:hashedpass, nome
+        });
+
+        // RESPOSTA
+        return res.status(201).json(user);
 
     }
 
     async auth(req, res) {
         const { email, senha } = req.body;
 
-        const user = await Usuario.findOne({
+        const user = await Mandato.findOne({
             where: {
                 email, senha
             }
@@ -47,14 +49,14 @@ class UsuariosController {
     }
 
     async list(req, res) {
-        const users = await Usuario.findAndCountAll();
+        const users = await Mandato.findAndCountAll();
         res.json(users);
     }
 
     async getById(req, res) {
         let { id } =req.params
         id=parseFloat(id)
-        const user=await Usuario.findByPk(id)
+        const user=await Mandato.findByPk(id)
         if(!user){
             throw {
                 status:HTTP_STATUS.NOT_FOUND,
@@ -72,17 +74,17 @@ class UsuariosController {
             updateObj.name=name
         }
         if(password){
-            // updateObj.password=await hashPassword(password)
+            updateObj.password=await hashPassword(password)
         }
         await Users.update(updateObj,{where: { id }});
         return res.status(HTTP_STATUS.OK).json({msg:"UPDATED"})
     }
     async delete(req, res) {
         const { id }=req.user;
-        await Usuario.destroy({where:{id}});
+        await Mandato.destroy({where:{id}});
         res.json({ message: 'DELETED'});
     }
 }
 
 
-module.exports = UsuariosController;
+module.exports = MandatoController;
