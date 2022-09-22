@@ -21,7 +21,10 @@ Mandato.init({
 
 Mandato.belongsTo(Politico, {foreignKey: 'id_politico'})
 
-Politico.hasMany(Mandato, {foreignKey: 'cpf'})
+Politico.hasMany(Mandato, {
+    foreignKey: 'cpf',
+    onDelete: 'CASCADE'
+})
 
 module.exports = {
     Mandato

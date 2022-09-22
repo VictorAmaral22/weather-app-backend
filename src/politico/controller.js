@@ -1,87 +1,117 @@
-const { Politico } = require("./model");
+const {Politico} = require("./model");
 const jwt = require("jsonwebtoken");
-const { Mandato } = require("../mandato/model");
-const { Partido } = require("../partido/model");
+const {Mandato} = require("../mandato/model");
+const {Partido} = require("../partido/model");
 
 class PoliticoController {
-  constructor() {}
+    constructor() {}
 
-  async create(req, res) {
-    // INPUT
-    const { cpf, name, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual } = req.body;
+    async create(req, res) {
+		try {
+			// INPUT
+			const {
+				cpf,
+				name,
+				foto,
+				email,
+				dataNascimento,
+				cidade,
+				estado,
+				pais,
+				partido,
+				mandatoAtual
+			} = req.body;
 
-    // PROCESSAMENTO
-    const user = await Politico.create({
-      cpf, name, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual
-    });
+			// PROCESSAMENTO
+			const user = await Politico.create({
+				cpf,
+				name,
+				foto,
+				email,
+				dataNascimento,
+				cidade,
+				estado,
+				pais,
+				partido,
+				mandatoAtual
+			});
 
-    // RESPOSTA
-    return res.status(201).json(user);
-  }
+			// RESPOSTA
+			return res
+				.status(201)
+				.json(user);
 
-  async auth(req, res) {
-    const { email, senha } = req.body;
-
-    const user = await Politico.findOne({
-      where: {
-        email,
-        senha,
-      },
-    });
-
-    if (!user) {
-      return res.status(400).json({ msg: "USER AND PASS NOT MATCH" });
+		} catch (error) {
+			return res.status(400).json({error})
+		}
     }
-    console.log(user);
-    const meuJwt = jwt.sign(
-      user.dataValues,
-      "SECRET NAO PODERIA ESTAR HARDCODED"
-    );
-    return res.json(meuJwt);
-  }
 
-  async list(req, res) {
-    const users = await Politico.findAndCountAll();
-    res.json(users);
-  }
+    async list(req, res) {
+		try {
+			const users = await Politico.findAndCountAll();
+        	res.status(200).json(users);
+		} catch (error) {
+			return res.status(400).json({error})
+		}
+    }
 
-  async getById(req, res) {
-    let { id } =req.params
-    // id=parseFloat(id)
-    const politico=await Politico.findByPk(id)
-    if(!politico){
-        throw {
-            status:500,
-            message:"Not Found"
+    async getById(req, res) {
+		try {
+			let {id} = req.params
+
+			const politico = await Politico.findByPk(id)
+			if (!politico) {
+				return res.status(404).json({msg: "Político não encontrado"})
+			}
+			if (politico.partido) {
+				if (politico.mandatoAtual) {
+					let mandato = await Mandato.findByPk(politico.mandatoAtual)
+					let partido = await Partido.findByPk(politico.partido)
+					return res
+						.status(201)
+						.json({politico, mandato, partido})
+				}
+			}
+
+			return res
+				.status(201)
+				.json({politico})
+		} catch (error) {
+            return res.status(400).json({error})
         }
     }
-    if(politico.partido){
-      if(politico.mandatoAtual){
-        let mandato =await Mandato.findByPk(politico.mandatoAtual)
-        let partido =await Partido.findByPk(politico.partido)
-        return res.status(201).json({politico, mandato, partido})
-      }
+
+    async update(req, res) {
+        try {
+            const {id} = req.body;
+            console.log(req.body)
+            await Politico.update(req.body, {
+                where: {
+                    cpf: id
+                }
+            });
+            return res
+                .status(201)
+                .json({msg: "UPDATED"})
+        } catch (error) {
+            return res.status(400).json({error})
+        }
     }
-    return res.status(201).json({politico})
-}
-async update(req, res) {
-  try{
-      const { id }=req.params;
-      console.log(req.body)
-      await Politico.update(req.body,{where: { cpf:id }});
-      return res.status(201).json({msg:"UPDATED"})
-  } catch(err){
-    console.log(err)
-    return res.json({msg:"Err"})
-  }
-}
-async delete(req, res) {
-    // const {id:userId}=req.user
-    const { id }=req.body;    
-    const deleteId=await Politico.findByPk(id)
-    await deleteId.destroy()
-    return res.status(201).json({msg:"DELETED"});
-}
+
+    async delete(req, res) {
+		try {
+			const {id} = req.body;
+			const deleteId = await Politico.findOne({where: {
+				cpf: id
+			}})
+			await deleteId.destroy()
+			return res
+				.status(201)
+				.json({msg: "DELETED"});
+		} catch (error) {
+			return res.status(400).json({error})
+		}
+    }
 }
 
 module.exports = PoliticoController;

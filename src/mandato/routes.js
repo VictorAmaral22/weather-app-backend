@@ -1,12 +1,11 @@
-const { Router } = require('express');
-const { isAuth } = require('../middlewares/isAuth');
+const {Router} = require('express');
+const {isAuth} = require('../middlewares/isAuth');
 const router = Router();
 
 const MandatoController = require('./controller');
 const controller = new MandatoController();
 
 router.post('/', (req, res) => controller.create(req, res));
-router.post('/auth', (req, res) => controller.auth(req, res));
 
 router.get('/', (req, res) => controller.list(req, res));
 router.get('/:id', (req, res) => controller.getById(req, res));
