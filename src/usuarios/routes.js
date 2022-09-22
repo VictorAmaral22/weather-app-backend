@@ -1,5 +1,5 @@
-const { Router } = require('express');
-const { isAuth } = require('../middlewares/isAuth');
+const {Router} = require('express');
+const {isAuth} = require('../middlewares/isAuth');
 const router = Router();
 
 const ExerciciosController = require('./controller');

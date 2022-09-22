@@ -9,7 +9,7 @@ Politico.init({
         type: DataTypes.STRING,
         primaryKey: true
     },
-    nome: DataTypes.STRING,
+    name: DataTypes.STRING,
     foto: DataTypes.STRING,
     email: DataTypes.STRING,
     dataNascimento: DataTypes.DATE,

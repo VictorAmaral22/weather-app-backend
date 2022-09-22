@@ -6,11 +6,11 @@ class PoliticoController {
 
   async create(req, res) {
     // INPUT
-    const { cpf, nome, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual } = req.body;
+    const { cpf, name, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual } = req.body;
 
     // PROCESSAMENTO
     const user = await Politico.create({
-      cpf, nome, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual
+      cpf, name, foto, email, dataNascimento, cidade, estado, pais, partido, mandatoAtual
     });
 
     // RESPOSTA

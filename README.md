@@ -1,6 +1,6 @@
 Partindo dos conteúdos apresentados em aula. Desenvolva uma API Rest, utilizando as técnicas de desenvolvimento, concentrando-se na legibilidade do código e boas práticas de programação.
 
-● Todos os trabalhos terão uma tabela usuário, com pelo menos os parâmetros nome, email, senha (criptografada)
+● Todos os trabalhos terão uma tabela usuário, com pelo menos os parâmetros name, email, senha (criptografada)
 
 ● O objeto será definido pelo aluno, deverá conter pelo menos 4 atributos, sendo um deles uma associação 1:N.
 

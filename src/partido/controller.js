@@ -6,12 +6,12 @@ class PartidoController {
 
   async create(req, res) {
     // INPUT
-    const { numero, nome, logo } = req.body;
+    const { numero, name, logo } = req.body;
 
     // PROCESSAMENTO
     const user = await Partido.create({
       numero,
-      nome,
+      name,
       logo,
     });
 
@@ -60,10 +60,10 @@ class PartidoController {
   }
   async update(req, res) {
     const { id } = req.params;
-    const { nome, logo } = req.body;
+    const { name, logo } = req.body;
     const updateObj = {};
-    if (nome) {
-      updateObj.nome = nome;
+    if (name) {
+      updateObj.name = name;
     }
     if (logo) {
       updateObj.logo = logo;

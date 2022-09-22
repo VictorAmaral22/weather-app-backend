@@ -5,11 +5,13 @@ const {sequelizeCon} = require('../config/db-config');
 class Usuario extends Model {}
 
 Usuario.init({
-    email: {
-        type: DataTypes.STRING,
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
-    nome: DataTypes.STRING,
+    email: DataTypes.STRING,
+    name: DataTypes.STRING,
     senha: DataTypes.STRING
 }, {
     sequelize: sequelizeCon,

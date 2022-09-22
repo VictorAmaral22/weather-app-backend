@@ -9,7 +9,7 @@ Partido.init({
         type: DataTypes.INTEGER,
         primaryKey: true
     },
-    nome: DataTypes.STRING,
+    name: DataTypes.STRING,
     logo: DataTypes.STRING
 }, {
     sequelize: sequelizeCon,

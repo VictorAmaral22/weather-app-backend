@@ -5,8 +5,6 @@ const usuariosRouter = require('./usuarios/routes');
 const express = require('express');
 const app = express();
 
-// INCLUI UM MIDDLEWARE PARA FAZER UM PARSER
-// DAS REQUISICOES COM JSON NO SEU BODY
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.get('/', (req, res) => {
