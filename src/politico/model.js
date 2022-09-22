@@ -1,9 +1,9 @@
-const { DataTypes, Model } = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 
-const { sequelizeCon } = require('../config/db-config');
+const {sequelizeCon} = require('../config/db-config');
 
 class Politico extends Model {}
-    
+
 Politico.init({
     cpf: {
         type: DataTypes.STRING,
@@ -17,15 +17,15 @@ Politico.init({
     estado: DataTypes.STRING,
     pais: DataTypes.STRING,
     partido: DataTypes.INTEGER,
-    mandatoAtual: DataTypes.INTEGER,
-}, { 
-    sequelize: sequelizeCon, 
+    mandatoAtual: DataTypes.INTEGER
+}, {
+    sequelize: sequelizeCon,
     schema: 'public',
     modelName: 'politico'
 });
-sequelizeCon.sync({
-    force: true
-});
 
+sequelizeCon.sync();
 
-module.exports = { Politico };
+module.exports = {
+    Politico
+};

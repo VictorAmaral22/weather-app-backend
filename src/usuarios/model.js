@@ -1,9 +1,9 @@
-const { DataTypes, Model } = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 
-const { sequelizeCon } = require('../config/db-config');
+const {sequelizeCon} = require('../config/db-config');
 
 class Usuario extends Model {}
-    
+
 Usuario.init({
     email: {
         type: DataTypes.STRING,
@@ -11,12 +11,12 @@ Usuario.init({
     },
     nome: DataTypes.STRING,
     senha: DataTypes.STRING
-}, { 
-    sequelize: sequelizeCon, 
+}, {
+    sequelize: sequelizeCon,
     schema: 'public',
     modelName: 'usuario'
 });
 
-
-
-module.exports = { Usuario };
+module.exports = {
+    Usuario
+};
