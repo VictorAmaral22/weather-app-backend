@@ -1,7 +1,6 @@
 const {DataTypes, Model} = require('sequelize');
 
 const {sequelizeCon} = require('../config/db-config');
-const {Politico} = require('../politico/model');
 class Mandato extends Model {}
 
 Mandato.init({
@@ -18,13 +17,6 @@ Mandato.init({
     schema: 'public',
     modelName: 'mandato'
 });
-
-Mandato.belongsTo(Politico, {foreignKey: 'id_politico'})
-
-Politico.hasMany(Mandato, {
-    foreignKey: 'cpf',
-    onDelete: 'CASCADE'
-})
 
 module.exports = {
     Mandato

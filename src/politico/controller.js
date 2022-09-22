@@ -18,7 +18,7 @@ class PoliticoController {
 				cidade,
 				estado,
 				pais,
-				partido,
+				id_partido,
 				mandatoAtual
 			} = req.body;
 
@@ -32,7 +32,7 @@ class PoliticoController {
 				cidade,
 				estado,
 				pais,
-				partido,
+				id_partido,
 				mandatoAtual
 			});
 
@@ -59,22 +59,32 @@ class PoliticoController {
 		try {
 			let {id} = req.params
 
-			const politico = await Politico.findByPk(id)
+			const politico = await Politico.findOne({
+				where: {
+					cpf: id
+				}
+			})
 			if (!politico) {
 				return res.status(404).json({msg: "Político não encontrado"})
 			}
-			if (politico.partido) {
-				if (politico.mandatoAtual) {
-					let mandato = await Mandato.findByPk(politico.mandatoAtual)
-					let partido = await Partido.findByPk(politico.partido)
+			if (politico.id_partido) {
+				let partido = await Partido.findByPk(politico.id_partido)
+				politico.partido = partido;
+				if (!politico.mandatoAtual) {
 					return res
-						.status(201)
-						.json({politico, mandato, partido})
+						.status(200)
+						.json({politico})
+				} else {
+					let mandato = await Mandato.findByPk(politico.mandatoAtual)
+					politico.mandatoAtual = mandato
+					return res
+						.status(200)
+						.json({politico})
 				}
 			}
 
 			return res
-				.status(201)
+				.status(200)
 				.json({politico})
 		} catch (error) {
             return res.status(400).json({error})
@@ -84,12 +94,21 @@ class PoliticoController {
     async update(req, res) {
         try {
             const {id} = req.body;
-            console.log(req.body)
+
+			const politico = await Politico.findOne({where: {
+				cpf: id
+			}})
+
+			if(!politico){
+				return res.status(404).json({msg: "Político não encontrado"})
+			}
+
             await Politico.update(req.body, {
                 where: {
                     cpf: id
                 }
             });
+			
             return res
                 .status(201)
                 .json({msg: "UPDATED"})
