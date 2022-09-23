@@ -1,12 +1,28 @@
-const { Sequelize } = require('sequelize');
+const { MongoClient } = require('mongodb');
+// or as an es module:
+// import { MongoClient } from 'mongodb'
 
-const sequelizeCon = new Sequelize('postgres://qgwmtfcffpsjza:2b3a36735198f59e502f56cd378a229ec6476733718cb417b1a461583cef2fd9@ec2-52-71-23-11.compute-1.amazonaws.com:5432/d3nk0frsejod3r', {
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
-    },
-});
+// Connection URL
+const url = 'mongodb+srv://victoramaral22:M0xXhoYmFO7Bnert@cluster0.44rrms7.mongodb.net/?retryWrites=true&w=majority';
+const client = new MongoClient(url);
 
-module.exports = { sequelizeCon };
+// Database Name
+const dbName = 'DS1database';
+
+async function ConnectMongoDB() {
+    // Use connect method to connect to the server
+    try {
+        await client.connect();
+        console.log('Connected successfully to server');
+        const db = client.db(dbName);
+        const collection = db.collection('city-history');
+    
+        // the following code examples can be pasted here...
+    
+        return collection;
+    } catch (error) {
+        return null;
+    }
+}
+
+module.exports = { ConnectMongoDB }
