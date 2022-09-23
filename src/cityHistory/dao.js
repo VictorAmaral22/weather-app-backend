@@ -13,7 +13,10 @@ const CityHistory = {
 
     async findAll () {
         let collection = await ConnectMongoDB();
-        let res = await collection.find({}).toArray();
+        let res = await collection.find({}).sort({
+            date: +1,
+            time: +1,
+        }).toArray();
         return res
     },
 
@@ -31,7 +34,10 @@ const CityHistory = {
             searchFilters.time = filters.time
         }
 
-        let res = await collection.find(searchFilters).toArray();
+        let res = await collection.find(searchFilters).sort({
+            date: +1,
+            time: +1,
+        }).toArray();
         return res
     },
 }
