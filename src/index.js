@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 var cors = require('cors')
 
+const PORT = process.env.PORT ? process.env.PORT : 3001;
+
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -17,4 +19,4 @@ app.get('/', (req, res) => {
 
 app.use('/cityHistory', cityHistoryRouter);
 
-app.listen(PORT, () => console.log("Listening at http://localhost:3001"));
+app.listen(PORT, () => console.log(`Listening at port ${PORT}`));
