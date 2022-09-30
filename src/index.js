@@ -17,4 +17,4 @@ app.get('/', (req, res) => {
 
 app.use('/cityHistory', cityHistoryRouter);
 
-app.listen(3001, () => console.log("Listening at http://localhost:3001"));
+app.listen(PORT, () => console.log("Listening at http://localhost:3001"));
