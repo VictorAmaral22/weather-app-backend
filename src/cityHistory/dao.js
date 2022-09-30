@@ -13,6 +13,7 @@ const CityHistory = {
 
     async findAll () {
         let collection = await ConnectMongoDB();
+        console.log("collection ",collection)
         let res = await collection.find({}).sort({
             date: +1,
             time: +1,
