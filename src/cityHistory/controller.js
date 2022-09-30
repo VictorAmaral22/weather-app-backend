@@ -14,12 +14,21 @@ class CityHistoryController {
                 .status(400)
                 .json({msg: "Id da cidade nulo"})    
             }
-            const response = await CityHistory.create(city_id, city_name, date, time, temperature, sensation, humidity, weather);
-            console.log("response ",response)
+            const check = await CityHistory.findByCity(city_id, { date });
+            console.log("check ",check);
+            if(check.length === 0){
+                const response = await CityHistory.create(city_id, city_name, date, time, temperature, sensation, humidity, weather);
+                console.log("response ",response)
+                
+                return res
+                    .status(201)
+                    .json({ msg: "Registro criado com sucesso"});
+            } else {
+                return res
+                    .status(200)
+                    .json({ msg: "Já existem dados para esse dia"});
+            }
 
-            return res
-                .status(201)
-                .json({ msg: "Registro criado com sucesso"});
         } catch (err) {
             res
                 .status(400)

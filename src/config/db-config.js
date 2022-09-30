@@ -16,7 +16,6 @@ async function ConnectMongoDB() {
         console.log('Connected successfully to server');
         const db = client.db(dbName);
         const collection = db.collection('city-history');
-    
         // the following code examples can be pasted here...
     
         return collection;
